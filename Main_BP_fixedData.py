@@ -76,6 +76,7 @@ if __name__ == '__main__':
     
     y_prediction = net(x_test)
     loss_prediction = criterion(y_prediction, y_test)
+    loss_prediction = loss_prediction.item()
     
     plt.plot(x_test.data.numpy(),y_test.data.numpy(),'+b')
     plt.plot(x_test.data.numpy(),y_prediction.data.numpy(),'or')
