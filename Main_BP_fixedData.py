@@ -24,6 +24,14 @@ class Net(nn.Module):
         x = self.predict(x)
         return x
     
+def R2_score(y_pred, y_true):
+    y_pred_ave = np.mean(y_pred)
+    a = np.sum((y_pred - y_true)**2)
+    b = np.sum((y_pred - y_pred_ave)**2)
+    r2 = 1 - a / b
+    return r2
+        
+
 if __name__ == '__main__':
     
     file_name = 'DataSet.mat'
@@ -48,19 +56,25 @@ if __name__ == '__main__':
     criterion = nn.MSELoss()
     optimizer = optim.SGD(net.parameters(),lr=0.1)
     
-    print('------ Start Training ------')
-    running_loss = []
+    print('------  Start Training  ------')
+    running_loss_MSE = []
+    running_loss_MAE = []
+    running_loss_R2_score = []
     
     for t in range(1000):
 
         optimizer.zero_grad()
         
         prediction = net(x_train)
-        loss = criterion(prediction, y_train)
+        loss = criterion(prediction, y_train)  #MSELoss
         loss.backward()
         optimizer.step()
         
-        running_loss.append(loss.item())
+        
+        running_loss_MSE.append(loss.item())
+        running_loss_MAE.append(F.l1_loss(prediction, y_train).item())
+        running_loss_R2_score.append(R2_score(prediction.data.numpy(), 
+                                              y_train.data.numpy()))
         
         if t % 99 == 0:
             plt.cla()
@@ -72,7 +86,7 @@ if __name__ == '__main__':
     plt.ioff()
     plt.show()
     
-    print('------      预测和可视化      ------')
+    print('------  prediction and visualization  ------')
     
     y_prediction = net(x_test)
     loss_prediction = criterion(y_prediction, y_test)
