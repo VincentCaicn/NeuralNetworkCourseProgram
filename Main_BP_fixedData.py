@@ -52,9 +52,12 @@ if __name__ == '__main__':
     y_test = y_test.reshape(-1,1)
     
     net = Net(n_input=1, n_hidden=7, n_output=1)
+    print(net)
     
     criterion = nn.MSELoss()
-    optimizer = optim.SGD(net.parameters(),lr=0.1)
+    optimizer = optim.SGD(net.parameters(),lr=0.01)
+    
+    plt.ion()   # something about plotting
     
     print('------  Start Training  ------')
     running_loss_MSE = []
@@ -62,10 +65,10 @@ if __name__ == '__main__':
     running_loss_R2_score = []
     
     for t in range(1000):
-
-        optimizer.zero_grad()
         
         prediction = net(x_train)
+        
+        optimizer.zero_grad()
         loss = criterion(prediction, y_train)  #MSELoss
         loss.backward()
         optimizer.step()
@@ -80,7 +83,7 @@ if __name__ == '__main__':
             plt.cla()
             plt.scatter(x_train.data.numpy(),y_train.data.numpy()) #绘制真实曲线
             plt.plot(x_train.data.numpy(),prediction.data.numpy(),'+r',lw=5)
-            plt.text(0.5,0,'Loss='+str(loss.item()),fontdict={'size':20,'color':'red'})
+            plt.text(-0.2,-1,'Loss='+str(np.half(loss.item())),fontdict={'size':15,'color':'red'})
             plt.pause(0.1)
             
     plt.ioff()
