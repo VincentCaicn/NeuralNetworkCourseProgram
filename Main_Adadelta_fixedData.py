@@ -100,7 +100,7 @@ if __name__ == '__main__':
     plt.plot(x_test.data.numpy(),y_prediction.data.numpy(),'or')
     plt.show()
     
-        scio.savemat('Result.mat', {'running_loss_MSE': running_loss_MSE,
+    scio.savemat('Result.mat', {'running_loss_MSE': running_loss_MSE,
                                 'running_loss_MAE': running_loss_MAE,
                                 'running_loss_R2_score': running_loss_R2_score,
                                 'y_prediction': y_prediction.data.numpy(),
